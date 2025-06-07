@@ -19,10 +19,17 @@ export const useUserStore = create<UserState>()((set) => ({
   currentUser: null,
 
   fetchUsers: async () => {
-    const res = await fetch('/api/users');
-    let users = await res.json();
-    users = users.map((u: any) => ({ ...u, userId: Number(u.userId) }));
-    set({ users });
+    try {
+      const res = await fetch('/api/users');
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      let users = await res.json();
+      users = users.map((u: any) => ({ ...u, userId: Number(u.userId) }));
+      set({ users });
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
   },
 
   createUser: async (name: string) => {

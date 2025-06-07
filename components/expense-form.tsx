@@ -50,11 +50,13 @@ export function ExpenseForm() {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
+      const formattedDate = format(data.date, 'yyyy-MM-dd');
+      
       await addExpense({
         amount: Number(data.amount),
         category: data.category,
         notes: data.notes || '',
-        date: data.date.toISOString().split('T')[0],
+        date: formattedDate,
         paymentMode: data.paymentMode,
       });
 
@@ -160,6 +162,9 @@ export function ExpenseForm() {
                         date > new Date() || date < new Date('1900-01-01')
                       }
                       initialFocus
+                      defaultMonth={new Date()}
+                      fromDate={new Date('1900-01-01')}
+                      toDate={new Date()}
                     />
                   </PopoverContent>
                 </Popover>

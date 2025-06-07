@@ -9,7 +9,7 @@ import { useExpenseStore, EXPENSE_CATEGORIES, PAYMENT_MODES } from '@/store/expe
 import { Search, Filter, CalendarIcon } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { ExpenseList } from './expense-list';
-import { addDays, subDays, startOfMonth } from 'date-fns';
+import { addDays, subDays, startOfMonth, endOfDay } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Collapsible, CollapsibleTrigger, CollapsibleContent } from '@/components/ui/collapsible';
@@ -36,13 +36,13 @@ export function ExpenseFilters() {
     let to: Date | null = null;
     if (value === 'this_month') {
       from = startOfMonth(now);
-      to = now;
+      to = endOfDay(now);
     } else if (value === 'last_30') {
       from = subDays(now, 30);
-      to = now;
+      to = endOfDay(now);
     } else if (value === 'last_90') {
       from = subDays(now, 90);
-      to = now;
+      to = endOfDay(now);
     } else if (value === 'all') {
       from = null;
       to = null;
@@ -53,12 +53,29 @@ export function ExpenseFilters() {
   };
 
   const handleCustomRangeChange = (field: 'from' | 'to', date: Date | undefined) => {
-    setFilters({
-      dateRange: {
-        ...filters.dateRange,
-        [field]: date || null,
-      },
-    });
+    if (date) {
+      // Set the time to end of day for the selected date
+      const selectedDate = endOfDay(date);
+      // If it's the current date, ensure it's included
+      const now = new Date();
+      const isCurrentDate = date.getDate() === now.getDate() && 
+                           date.getMonth() === now.getMonth() && 
+                           date.getFullYear() === now.getFullYear();
+      
+      setFilters({
+        dateRange: {
+          ...filters.dateRange,
+          [field]: isCurrentDate ? endOfDay(now) : selectedDate,
+        },
+      });
+    } else {
+      setFilters({
+        dateRange: {
+          ...filters.dateRange,
+          [field]: null,
+        },
+      });
+    }
   };
 
   const handleCategoryChange = (category: string, checked: boolean) => {
