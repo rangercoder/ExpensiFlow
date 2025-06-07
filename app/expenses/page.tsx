@@ -102,10 +102,9 @@ export default function ExpensesPage() {
 
       {/* Main Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3 bg-[#4DC9A9]/10">
+        <TabsList className="grid w-full grid-cols-2 bg-[#4DC9A9]/10">
           <TabsTrigger value="add" className="data-[state=active]:bg-[#4DC9A9] data-[state=active]:text-white">Add Expense</TabsTrigger>
-          <TabsTrigger value="filter" className="data-[state=active]:bg-[#4DC9A9] data-[state=active]:text-white">Filter & Search</TabsTrigger>
-          <TabsTrigger value="list" className="data-[state=active]:bg-[#4DC9A9] data-[state=active]:text-white">Expense List</TabsTrigger>
+          <TabsTrigger value="filter" className="data-[state=active]:bg-[#4DC9A9] data-[state=active]:text-white">Expense History</TabsTrigger>
         </TabsList>
         
         <TabsContent value="add" className="space-y-4">
@@ -125,7 +124,7 @@ export default function ExpensesPage() {
         <TabsContent value="filter" className="space-y-4">
           <Card className="border-[#30437A]/20">
             <CardHeader>
-              <CardTitle className="text-[#30437A]">Filter Expenses</CardTitle>
+              <CardTitle className="text-[#30437A]">Expense History</CardTitle>
               <CardDescription className="text-[#30437A]/60">
                 Use filters to find specific expenses
               </CardDescription>
@@ -134,10 +133,6 @@ export default function ExpensesPage() {
               <ExpenseFilters />
             </CardContent>
           </Card>
-        </TabsContent>
-        
-        <TabsContent value="list" className="space-y-4">
-          <ExpenseList />
         </TabsContent>
       </Tabs>
     </div>

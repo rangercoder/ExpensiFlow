@@ -25,13 +25,13 @@ import { toast } from 'sonner';
 type SortField = 'date' | 'amount' | 'category';
 type SortOrder = 'asc' | 'desc';
 
-export function ExpenseList() {
+export function ExpenseList({ expenses: propExpenses }: { expenses?: any[] }) {
   const { getFilteredExpenses, deleteExpense } = useExpenseStore();
   const [sortField, setSortField] = useState<SortField>('date');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const [searchTerm, setSearchTerm] = useState('');
 
-  const expenses = getFilteredExpenses();
+  const expenses = propExpenses ?? getFilteredExpenses();
 
   // Additional local filtering for search
   const filteredExpenses = expenses.filter(expense =>
@@ -68,6 +68,7 @@ export function ExpenseList() {
 
   const handleDelete = async (id: string) => {
     await deleteExpense(id);
+    await useExpenseStore.getState().fetchExpenses();
     toast.success('Expense deleted successfully');
   };
 
@@ -170,7 +171,7 @@ export function ExpenseList() {
       ) : (
         <div className="grid gap-4">
           {sortedExpenses.map((expense) => (
-            <Card key={expense.id} className="hover:shadow-md transition-shadow border-[#4DC9A9]/20 hover:border-[#4DC9A9]/40">
+            <Card key={expense.id || expense._id} className="hover:shadow-md transition-shadow border-[#4DC9A9]/20 hover:border-[#4DC9A9]/40">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1 space-y-3">
@@ -215,7 +216,7 @@ export function ExpenseList() {
                       <AlertDialogFooter>
                         <AlertDialogCancel className="border-[#30437A]/20 text-[#30437A]">Cancel</AlertDialogCancel>
                         <AlertDialogAction
-                          onClick={() => handleDelete(expense.id)}
+                          onClick={() => handleDelete(expense.id || expense._id)}
                           className="bg-red-500 text-white hover:bg-red-600"
                         >
                           Delete
