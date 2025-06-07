@@ -13,7 +13,8 @@ export async function POST(req: Request) {
     return NextResponse.json(expense, { status: 201 });
   } catch (error) {
     console.error('Error saving expense:', error);
-    return NextResponse.json({ error: 'Failed to save expense', details: error?.message || error }, { status: 500 });
+    const details = typeof error === 'object' && error && 'message' in error ? (error as any).message : String(error);
+    return NextResponse.json({ error: 'Failed to save expense', details }, { status: 500 });
   }
 }
 
