@@ -50,7 +50,7 @@ export function ExpenseForm() {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
-      addExpense({
+      await addExpense({
         amount: Number(data.amount),
         category: data.category,
         notes: data.notes || '',
