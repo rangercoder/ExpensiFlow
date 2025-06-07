@@ -8,17 +8,34 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useExpenseStore } from '@/store/expense-store';
 import { PlusCircle, Filter, List } from 'lucide-react';
+import { useUserStore } from '@/store/user-store';
+import { useRouter } from 'next/navigation';
 
 export default function ExpensesPage() {
   const [activeTab, setActiveTab] = useState('add');
   const { expenses, getFilteredExpenses, fetchExpenses } = useExpenseStore();
+  const { currentUser } = useUserStore();
+  const router = useRouter();
 
   useEffect(() => {
-    fetchExpenses();
-  }, [fetchExpenses]);
+    if (!currentUser) {
+      router.replace('/signin');
+    }
+  }, [currentUser, router]);
+
+  useEffect(() => {
+    if (currentUser) {
+      fetchExpenses();
+    } else {
+      // Clear expenses if no user
+      useExpenseStore.setState({ expenses: [] });
+    }
+  }, [currentUser, fetchExpenses]);
   
   const filteredExpenses = getFilteredExpenses();
   const totalExpenses = filteredExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+
+  if (!currentUser) return null;
 
   return (
     <div className="space-y-6">

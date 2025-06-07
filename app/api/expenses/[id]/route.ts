@@ -12,6 +12,9 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
   await dbConnect();
   const data = await req.json();
+  if ('userId' in data) {
+    delete data.userId; // Prevent changing userId
+  }
   const expense = await Expense.findByIdAndUpdate(params.id, data, { new: true });
   if (!expense) return NextResponse.json({ error: 'Not found' }, { status: 404 });
   return NextResponse.json(expense);

@@ -8,21 +8,15 @@ interface AnalyticsChartProps {
 }
 
 const COLORS = {
-  'Food & Dining': '#4DC9A9',
+  'Rental': '#4DC9A9',
   'Transportation': '#30437A',
-  'Shopping': '#6B8DD6',
   'Entertainment': '#8ED1FC',
   'Bills & Utilities': '#37B7C3',
   'Healthcare': '#4DC9A9',
   'Education': '#30437A',
   'Travel': '#6B8DD6',
   'Groceries': '#8ED1FC',
-  'Personal Care': '#37B7C3',
-  'Home & Garden': '#4DC9A9',
   'Investment': '#30437A',
-  'Insurance': '#6B8DD6',
-  'Taxes': '#8ED1FC',
-  'Charity': '#37B7C3',
   'Other': '#9CA3AF',
 };
 

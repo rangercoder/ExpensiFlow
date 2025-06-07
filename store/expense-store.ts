@@ -1,4 +1,5 @@
-import { create } from 'zustand';
+import { create } from "zustand";
+import { useUserStore } from "./user-store";
 
 export interface Expense {
   id: string;
@@ -8,6 +9,7 @@ export interface Expense {
   date: string;
   paymentMode: string;
   createdAt: string;
+  userId: string;
 }
 
 export interface ExpenseFilters {
@@ -24,7 +26,9 @@ interface ExpenseState {
   expenses: Expense[];
   filters: ExpenseFilters;
   fetchExpenses: () => Promise<void>;
-  addExpense: (expense: Omit<Expense, 'id' | 'createdAt'>) => Promise<void>;
+  addExpense: (
+    expense: Omit<Expense, "id" | "createdAt" | "userId">
+  ) => Promise<void>;
   updateExpense: (id: string, expense: Partial<Expense>) => Promise<void>;
   deleteExpense: (id: string) => Promise<void>;
   setFilters: (filters: Partial<ExpenseFilters>) => void;
@@ -37,7 +41,7 @@ const defaultFilters: ExpenseFilters = {
   dateRange: { from: null, to: null },
   categories: [],
   paymentModes: [],
-  searchQuery: '',
+  searchQuery: "",
 };
 
 export const useExpenseStore = create<ExpenseState>()((set, get) => ({
@@ -45,25 +49,35 @@ export const useExpenseStore = create<ExpenseState>()((set, get) => ({
   filters: defaultFilters,
 
   fetchExpenses: async () => {
-    const res = await fetch('/api/expenses');
+    const user = useUserStore.getState().currentUser;
+    if (!user) return set({ expenses: [] });
+    const res = await fetch(`/api/expenses?userId=${user.id}`);
     const data = await res.json();
     set({ expenses: data });
   },
 
   addExpense: async (expense) => {
-    const res = await fetch('/api/expenses', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(expense),
+    const user = useUserStore.getState().currentUser;
+    if (!user) return;
+    const res = await fetch("/api/expenses", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ...expense, userId: user.id }),
     });
+    if (!res.ok) {
+      const error = await res.json();
+      console.error("Failed to add expense:", error);
+      alert("Failed to add expense: " + (error.error || "Unknown error"));
+      return;
+    }
     const newExpense = await res.json();
     set((state) => ({ expenses: [...state.expenses, newExpense] }));
   },
 
   updateExpense: async (id, expense) => {
     const res = await fetch(`/api/expenses/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(expense),
     });
     const updated = await res.json();
@@ -73,83 +87,85 @@ export const useExpenseStore = create<ExpenseState>()((set, get) => ({
   },
 
   deleteExpense: async (id) => {
-    await fetch(`/api/expenses/${id}`, { method: 'DELETE' });
+    await fetch(`/api/expenses/${id}`, { method: "DELETE" });
     set((state) => ({ expenses: state.expenses.filter((e) => e.id !== id) }));
   },
 
-  setFilters: (filters) => set((state) => ({
-    filters: { ...state.filters, ...filters },
-  })),
+  setFilters: (filters) =>
+    set((state) => ({
+      filters: { ...state.filters, ...filters },
+    })),
 
   clearFilters: () => set({ filters: defaultFilters }),
 
   getFilteredExpenses: () => {
     const { expenses, filters } = get();
     return expenses.filter((expense) => {
-          // Date range filter
-          if (filters.dateRange.from || filters.dateRange.to) {
-            const expenseDate = new Date(expense.date);
-            if (filters.dateRange.from && expenseDate < filters.dateRange.from) return false;
-            if (filters.dateRange.to && expenseDate > filters.dateRange.to) return false;
-          }
-          
-          // Category filter
-          if (filters.categories.length > 0 && !filters.categories.includes(expense.category)) {
-            return false;
-          }
-          
-          // Payment mode filter
-          if (filters.paymentModes.length > 0 && !filters.paymentModes.includes(expense.paymentMode)) {
-            return false;
-          }
-          
-          // Search query filter
-          if (filters.searchQuery) {
-            const query = filters.searchQuery.toLowerCase();
-            return (
-              expense.notes.toLowerCase().includes(query) ||
-              expense.category.toLowerCase().includes(query) ||
-              expense.paymentMode.toLowerCase().includes(query)
-            );
-          }
-          
-          return true;
-        });
-      },
-      
+      // Date range filter
+      if (filters.dateRange.from || filters.dateRange.to) {
+        const expenseDate = new Date(expense.date);
+        if (filters.dateRange.from && expenseDate < filters.dateRange.from)
+          return false;
+        if (filters.dateRange.to && expenseDate > filters.dateRange.to)
+          return false;
+      }
+
+      // Category filter
+      if (
+        filters.categories.length > 0 &&
+        !filters.categories.includes(expense.category)
+      ) {
+        return false;
+      }
+
+      // Payment mode filter
+      if (
+        filters.paymentModes.length > 0 &&
+        !filters.paymentModes.includes(expense.paymentMode)
+      ) {
+        return false;
+      }
+
+      // Search query filter
+      if (filters.searchQuery) {
+        const query = filters.searchQuery.toLowerCase();
+        return (
+          expense.notes.toLowerCase().includes(query) ||
+          expense.category.toLowerCase().includes(query) ||
+          expense.paymentMode.toLowerCase().includes(query)
+        );
+      }
+
+      return true;
+    });
+  },
+
   getAnalyticsData: async () => {
-    const res = await fetch('/api/expenses/analytics');
+    const user = useUserStore.getState().currentUser;
+    if (!user) return [];
+    const res = await fetch(`/api/expenses/analytics?userId=${user.id}`);
     const data = await res.json();
     return data;
   },
 }));
 
 export const EXPENSE_CATEGORIES = [
-  'Food & Dining',
-  'Transportation',
-  'Shopping',
-  'Entertainment',
-  'Bills & Utilities',
-  'Healthcare',
-  'Education',
-  'Travel',
-  'Groceries',
-  'Personal Care',
-  'Home & Garden',
-  'Investment',
-  'Insurance',
-  'Taxes',
-  'Charity',
-  'Other',
+  "Rental",
+  "Groceries",
+  "Travel",
+  "Entertainment",
+  "Bills & Utilities",
+  "Investment",
+  "Healthcare",
+  "Education",
+  "Other",
 ];
 
 export const PAYMENT_MODES = [
-  'Cash',
-  'Credit Card',
-  'Debit Card',
-  'Bank Transfer',
-  'Digital Wallet',
-  'UPI',
-  'Check',
-  'Other',
+  "UPI",
+  "Cash",
+  "Credit Card",
+  "Debit Card",
+  "Net Banking",
+  "Other",
 ];

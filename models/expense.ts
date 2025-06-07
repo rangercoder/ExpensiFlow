@@ -7,6 +7,7 @@ export interface IExpense extends Document {
   date: string;
   paymentMode: string;
   createdAt: string;
+  userId: string;
 }
 
 const ExpenseSchema = new Schema<IExpense>(
@@ -17,6 +18,7 @@ const ExpenseSchema = new Schema<IExpense>(
     date: { type: String, required: true },
     paymentMode: { type: String, required: true },
     createdAt: { type: String, default: () => new Date().toISOString() },
+    userId: { type: String, required: true },
   },
   {
     toJSON: {

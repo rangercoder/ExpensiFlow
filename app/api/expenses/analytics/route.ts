@@ -2,9 +2,14 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Expense from '@/models/expense';
 
-export async function GET() {
+export async function GET(req: Request) {
   await dbConnect();
-  const expenses = await Expense.find().lean();
+  const { searchParams } = new URL(req.url);
+  const userId = searchParams.get('userId');
+  if (!userId) {
+    return NextResponse.json({ error: 'userId is required' }, { status: 400 });
+  }
+  const expenses = await Expense.find({ userId }).lean();
   const monthly: Record<string, Record<string, number>> = {};
 
   expenses.forEach((e: any) => {

@@ -6,10 +6,15 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Wallet, BarChart3, Home, Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import { useUserStore } from '@/store/user-store';
+import { useRouter } from 'next/navigation';
 
 export function Navbar() {
   const pathname = usePathname();
   const { theme, setTheme } = useTheme();
+  const { currentUser, setCurrentUser } = useUserStore();
+  const router = useRouter();
 
   const navItems = [
     {
@@ -74,6 +79,27 @@ export function Navbar() {
               <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
               <span className="sr-only">Toggle theme</span>
             </Button>
+            {currentUser ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="border-[#4DC9A9]/30 text-[#30437A] flex items-center gap-2">
+                    <span className="font-medium">{currentUser.name}</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => { setCurrentUser(null); router.push('/signin'); }}>
+                    Sign out
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => router.push('/signin')}>
+                    Switch User
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button variant="outline" className="border-[#4DC9A9]/30 text-[#30437A]" onClick={() => router.push('/signin')}>
+                Sign In
+              </Button>
+            )}
           </div>
         </div>
       </div>

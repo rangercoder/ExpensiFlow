@@ -5,10 +5,20 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useExpenseStore } from '@/store/expense-store';
 import { BarChart3, TrendingUp, Calendar, IndianRupee} from 'lucide-react';
+import { useUserStore } from '@/store/user-store';
+import { useRouter } from 'next/navigation';
 
 export default function AnalyticsPage() {
   const { expenses, fetchExpenses, getAnalyticsData } = useExpenseStore();
   const [analyticsData, setAnalyticsData] = useState<any[]>([]);
+  const { currentUser } = useUserStore();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!currentUser) {
+      router.replace('/signin');
+    }
+  }, [currentUser, router]);
 
   useEffect(() => {
     fetchExpenses();
@@ -33,6 +43,8 @@ export default function AnalyticsPage() {
         return acc;
       }, {} as Record<string, number>)
     ).sort(([,a], [,b]) => b - a)[0] : null;
+
+  if (!currentUser) return null;
 
   return (
     <div className="space-y-6">

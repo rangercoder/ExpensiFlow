@@ -35,9 +35,9 @@ export function ExpenseList() {
 
   // Additional local filtering for search
   const filteredExpenses = expenses.filter(expense =>
-    expense.notes.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    expense.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    expense.paymentMode.toLowerCase().includes(searchTerm.toLowerCase())
+    (expense.notes ?? '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (expense.category ?? '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (expense.paymentMode ?? '').toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Sort expenses
@@ -82,14 +82,14 @@ export function ExpenseList() {
 
   const getCategoryColor = (category: string) => {
     const colors = {
-      'Food & Dining': 'bg-[#4DC9A9]/10 text-[#4DC9A9] border-[#4DC9A9]/20',
+      'Rental': 'bg-[#4DC9A9]/10 text-[#4DC9A9] border-[#4DC9A9]/20',
       'Transportation': 'bg-[#30437A]/10 text-[#30437A] border-[#30437A]/20',
-      'Shopping': 'bg-[#6B8DD6]/10 text-[#6B8DD6] border-[#6B8DD6]/20',
+      'Travel': 'bg-[#6B8DD6]/10 text-[#6B8DD6] border-[#6B8DD6]/20',
       'Entertainment': 'bg-[#8ED1FC]/10 text-[#8ED1FC] border-[#8ED1FC]/20',
       'Bills & Utilities': 'bg-[#37B7C3]/10 text-[#37B7C3] border-[#37B7C3]/20',
       'Healthcare': 'bg-[#4DC9A9]/10 text-[#4DC9A9] border-[#4DC9A9]/20',
       'Education': 'bg-[#30437A]/10 text-[#30437A] border-[#30437A]/20',
-      'Travel': 'bg-[#6B8DD6]/10 text-[#6B8DD6] border-[#6B8DD6]/20',
+      'Others': 'bg-[#6B8DD6]/10 text-[#6B8DD6] border-[#6B8DD6]/20',
       'Groceries': 'bg-[#8ED1FC]/10 text-[#8ED1FC] border-[#8ED1FC]/20',
       'Personal Care': 'bg-[#37B7C3]/10 text-[#37B7C3] border-[#37B7C3]/20',
     };
