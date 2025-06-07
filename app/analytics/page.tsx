@@ -4,11 +4,19 @@ import { AnalyticsChart } from '@/components/analytics-chart';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useExpenseStore } from '@/store/expense-store';
 import { BarChart3, TrendingUp, Calendar, DollarSign } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export default function AnalyticsPage() {
-  const { expenses, getAnalyticsData } = useExpenseStore();
-  
-  const analyticsData = getAnalyticsData();
+  const { expenses, fetchExpenses, getAnalyticsData } = useExpenseStore();
+  const [analyticsData, setAnalyticsData] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetchExpenses();
+  }, [fetchExpenses]);
+
+  useEffect(() => {
+    getAnalyticsData().then(setAnalyticsData);
+  }, [expenses, getAnalyticsData]);
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
   const averageMonthly = analyticsData.length > 0 ? 
     analyticsData.reduce((sum, month) => {
