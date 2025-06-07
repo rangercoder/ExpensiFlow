@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useExpenseStore, EXPENSE_CATEGORIES } from '@/store/expense-store';
+import { useExpenseStore, EXPENSE_CATEGORIES, PAYMENT_MODES } from '@/store/expense-store';
 import { Search, Filter, CalendarIcon } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { ExpenseList } from './expense-list';
@@ -94,27 +94,6 @@ export function ExpenseFilters() {
         </div>
         <CollapsibleContent>
           <div className="space-y-6">
-            {/* Search */}
-            <div className="space-y-2">
-              <Label htmlFor="search" className="text-[#30437A]">Search Expenses</Label>
-              <div className="flex space-x-2">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#30437A]/60" />
-                  <Input
-                    id="search"
-                    placeholder="Search by notes, category, or payment mode..."
-                    className="pl-10 border-[#4DC9A9]/30 focus:border-[#4DC9A9] focus:ring-[#4DC9A9]"
-                    value={localSearchQuery}
-                    onChange={(e) => setLocalSearchQuery(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleSearchSubmit()}
-                  />
-                </div>
-                <Button onClick={handleSearchSubmit} className="bg-[#4DC9A9] hover:bg-[#4DC9A9]/90 text-white">Search</Button>
-              </div>
-            </div>
-
-            <Separator className="bg-[#4DC9A9]/20" />
-
             {/* Timeline Filter */}
             <div className="space-y-2">
               <Label className="text-[#30437A]">Timeline</Label>
@@ -217,6 +196,34 @@ export function ExpenseFilters() {
                       className="text-sm font-normal cursor-pointer text-[#30437A]"
                     >
                       {category}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Payment Method Multi-Select */}
+            <div className="space-y-2">
+              <Label className="text-[#30437A]">Payment Methods</Label>
+              <div className="flex flex-wrap gap-3">
+                {PAYMENT_MODES.map((mode) => (
+                  <div key={mode} className="flex items-center space-x-2">
+                    <Checkbox
+                      id={`payment-${mode}`}
+                      checked={filters.paymentModes.includes(mode)}
+                      onCheckedChange={(checked) => {
+                        const newModes = checked
+                          ? [...filters.paymentModes, mode]
+                          : filters.paymentModes.filter((m) => m !== mode);
+                        setFilters({ paymentModes: newModes });
+                      }}
+                      className="border-[#4DC9A9] data-[state=checked]:bg-[#4DC9A9] data-[state=checked]:border-[#4DC9A9]"
+                    />
+                    <Label 
+                      htmlFor={`payment-${mode}`} 
+                      className="text-sm font-normal cursor-pointer text-[#30437A]"
+                    >
+                      {mode}
                     </Label>
                   </div>
                 ))}
