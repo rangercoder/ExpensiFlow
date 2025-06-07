@@ -8,7 +8,7 @@ import { Navbar } from '@/components/navbar';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'ExpenseFlow - Smart Expense Tracker',
+  title: 'ExpensiFlow - Smart Expense Tracker',
   description: 'Track your expenses with powerful analytics and insights',
 };
 

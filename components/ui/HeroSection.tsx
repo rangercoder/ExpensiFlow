@@ -11,7 +11,7 @@ export function HeroSection() {
         </div>
       </div>
       <h1 className="text-4xl font-bold tracking-tight text-[#30437A]">
-        Welcome to Expensify
+        Welcome to ExpensiFlow
       </h1>
       <p className="text-xl text-[#30437A]/70 max-w-2xl mx-auto">
         Take control of your finances with smart expense tracking and powerful

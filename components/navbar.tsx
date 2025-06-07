@@ -38,7 +38,7 @@ export function Navbar() {
               <div className="p-1.5 rounded-lg bg-[#4DC9A9]">
                 <Wallet className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold text-xl text-[#30437A]">ExpenseFlow</span>
+              <span className="font-bold text-xl text-[#30437A]">ExpensiFlow</span>
             </Link>
             
             <nav className="hidden md:flex items-center space-x-6">
