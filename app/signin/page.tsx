@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useUserStore } from '@/store/user-store';
+import { useUserStore, User } from '@/store/user-store';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,7 +17,7 @@ export default function SignInPage() {
     fetchUsers();
   }, [fetchUsers]);
 
-  const handleSignIn = (user: any) => {
+  const handleSignIn = (user: User) => {
     setCurrentUser(user);
     router.push('/');
   };
@@ -44,7 +44,7 @@ export default function SignInPage() {
             <div className="space-y-2">
               {users.length === 0 && <div className="text-[#30437A]/60">No users found.</div>}
               {users.map((user) => (
-                <Button key={user.id} className="w-full justify-start" variant="outline" onClick={() => handleSignIn(user)}>
+                <Button key={user.userId} className="w-full justify-start" variant="outline" onClick={() => handleSignIn(user)}>
                   {user.name}
                 </Button>
               ))}
