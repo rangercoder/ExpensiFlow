@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ExpenseForm } from '@/components/expense-form';
 import { ExpenseList } from '@/components/expense-list';
 import { ExpenseFilters } from '@/components/expense-filters';
@@ -11,7 +11,11 @@ import { PlusCircle, Filter, List } from 'lucide-react';
 
 export default function ExpensesPage() {
   const [activeTab, setActiveTab] = useState('add');
-  const { expenses, getFilteredExpenses } = useExpenseStore();
+  const { expenses, getFilteredExpenses, fetchExpenses } = useExpenseStore();
+
+  useEffect(() => {
+    fetchExpenses();
+  }, [fetchExpenses]);
   
   const filteredExpenses = getFilteredExpenses();
   const totalExpenses = filteredExpenses.reduce((sum, expense) => sum + expense.amount, 0);

@@ -66,8 +66,8 @@ export function ExpenseList() {
     return 0;
   });
 
-  const handleDelete = (id: string) => {
-    deleteExpense(id);
+  const handleDelete = async (id: string) => {
+    await deleteExpense(id);
     toast.success('Expense deleted successfully');
   };
 
