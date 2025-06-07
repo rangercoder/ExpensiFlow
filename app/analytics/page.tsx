@@ -3,7 +3,7 @@
 import { AnalyticsChart } from '@/components/analytics-chart';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useExpenseStore } from '@/store/expense-store';
-import { BarChart3, TrendingUp, Calendar, DollarSign } from 'lucide-react';
+import { BarChart3, TrendingUp, Calendar, IndianRupee} from 'lucide-react';
 
 export default function AnalyticsPage() {
   const { expenses, getAnalyticsData } = useExpenseStore();
@@ -40,10 +40,10 @@ export default function AnalyticsPage() {
         <Card className="border-[#4DC9A9]/20">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-[#30437A]">Total Spent</CardTitle>
-            <DollarSign className="h-4 w-4 text-[#4DC9A9]" />
+            <IndianRupee className="h-4 w-4 text-[#4DC9A9]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[#30437A]">${totalExpenses.toFixed(2)}</div>
+            <div className="text-2xl font-bold text-[#30437A]">₹{totalExpenses.toFixed(2)}</div>
             <p className="text-xs text-[#30437A]/60">
               All time total
             </p>
@@ -56,7 +56,7 @@ export default function AnalyticsPage() {
             <TrendingUp className="h-4 w-4 text-[#30437A]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[#30437A]">${averageMonthly.toFixed(2)}</div>
+            <div className="text-2xl font-bold text-[#30437A]">₹{averageMonthly.toFixed(2)}</div>
             <p className="text-xs text-[#30437A]/60">
               Across {analyticsData.length} months
             </p>
@@ -73,7 +73,7 @@ export default function AnalyticsPage() {
               {topCategory ? topCategory[0] : 'N/A'}
             </div>
             <p className="text-xs text-[#30437A]/60">
-              {topCategory ? `$${topCategory[1].toFixed(2)}` : 'No data'}
+              {topCategory ? `₹${topCategory[1].toFixed(2)}` : 'No data'}
             </p>
           </CardContent>
         </Card>

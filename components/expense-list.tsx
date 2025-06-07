@@ -148,7 +148,7 @@ export function ExpenseList() {
           <div className="text-sm text-[#30437A]/60">
             Showing {sortedExpenses.length} expense{sortedExpenses.length !== 1 ? 's' : ''} 
             {filteredExpenses.length !== expenses.length && ` (filtered from ${expenses.length})`}
-            • Total: ${sortedExpenses.reduce((sum, expense) => sum + expense.amount, 0).toFixed(2)}
+            • Total: ₹{sortedExpenses.reduce((sum, expense) => sum + expense.amount, 0).toFixed(2)}
           </div>
         </CardContent>
       </Card>
@@ -177,7 +177,7 @@ export function ExpenseList() {
                     <div className="flex items-center gap-3">
                       <div className="flex items-center gap-2">
                         <DollarSign className="h-5 w-5 text-[#4DC9A9]" />
-                        <span className="text-2xl font-bold text-[#30437A]">${expense.amount.toFixed(2)}</span>
+                        <span className="text-2xl font-bold text-[#30437A]">₹{expense.amount.toFixed(2)}</span>
                       </div>
                       <Badge className={getCategoryColor(expense.category)}>
                         {expense.category}

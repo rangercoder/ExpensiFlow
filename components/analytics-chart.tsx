@@ -33,7 +33,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     return (
       <div className="bg-white border border-[#4DC9A9]/20 rounded-lg shadow-lg p-4 space-y-2">
         <p className="font-medium text-[#30437A]">{`Month: ${label}`}</p>
-        <p className="text-sm text-[#30437A]/70">{`Total: $${total.toFixed(2)}`}</p>
+        <p className="text-sm text-[#30437A]/70">{`Total: ₹${total.toFixed(2)}`}</p>
         <div className="space-y-1">
           {payload
             .filter((entry: any) => entry.value > 0)
@@ -47,7 +47,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
                   />
                   <span className="text-[#30437A]">{entry.dataKey}</span>
                 </div>
-                <span className="font-medium text-[#30437A]">${entry.value.toFixed(2)}</span>
+                <span className="font-medium text-[#30437A]">₹{entry.value.toFixed(2)}</span>
               </div>
             ))}
         </div>
@@ -101,7 +101,7 @@ export function AnalyticsChart({ data }: AnalyticsChartProps) {
           <YAxis 
             className="text-xs"
             stroke="#30437A"
-            tickFormatter={(value) => `$${value}`}
+            tickFormatter={(value) => `₹${value}`}
           />
           <Tooltip content={<CustomTooltip />} />
           <Legend 

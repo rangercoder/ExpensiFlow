@@ -87,7 +87,7 @@ export function ExpenseForm() {
                 <FormControl>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#30437A]/60">
-                      $
+                     ₹ 
                     </span>
                     <Input
                       placeholder="0.00"

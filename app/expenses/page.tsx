@@ -19,7 +19,7 @@ export default function ExpensesPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight text-[#30437A]">Expense Tracker</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-[#30437A]">Expense Tracker</h1>t
         <p className="text-[#30437A]/70">
           Manage your expenses with ease and precision
         </p>
@@ -33,7 +33,7 @@ export default function ExpensesPage() {
             <PlusCircle className="h-4 w-4 text-[#4DC9A9]" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-[#30437A]">${totalExpenses.toFixed(2)}</div>
+            <div className="text-2xl font-bold text-[#30437A]">₹{totalExpenses.toFixed(2)}</div>
             <p className="text-xs text-[#30437A]/60">
               {filteredExpenses.length} expense(s)
             </p>
@@ -47,7 +47,7 @@ export default function ExpensesPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-[#30437A]">
-              ${expenses
+              ₹{expenses
                 .filter(expense => {
                   const expenseDate = new Date(expense.date);
                   const now = new Date();
