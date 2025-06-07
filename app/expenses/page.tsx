@@ -23,7 +23,7 @@ export default function ExpensesPage() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight text-[#30437A]">Expense Tracker</h1>t
+        <h1 className="text-3xl font-bold tracking-tight text-[#30437A]">Expense Tracker</h1>
         <p className="text-[#30437A]/70">
           Manage your expenses with ease and precision
         </p>
