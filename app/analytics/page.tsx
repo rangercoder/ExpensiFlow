@@ -1,6 +1,7 @@
 'use client';
 
 import { AnalyticsChart } from '@/components/analytics-chart';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useExpenseStore } from '@/store/expense-store';
 import { BarChart3, TrendingUp, Calendar, IndianRupee} from 'lucide-react';
