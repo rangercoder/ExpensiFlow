@@ -22,9 +22,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
+          defaultTheme="light"
+          enableSystem={false}
+          disableTransitionOnChange={false}
         >
           <div className="min-h-screen bg-background">
             <Navbar />
