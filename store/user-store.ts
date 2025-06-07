@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 export interface User {
-  id: string;
+  userId: number;
   name: string;
   createdAt: string;
 }
@@ -21,7 +21,7 @@ export const useUserStore = create<UserState>()((set) => ({
   fetchUsers: async () => {
     const res = await fetch('/api/users');
     let users = await res.json();
-    users = users.map((u: any) => ({ ...u, id: u.id || u._id }));
+    users = users.map((u: any) => ({ ...u, userId: Number(u.userId) }));
     set({ users });
   },
 
@@ -32,9 +32,9 @@ export const useUserStore = create<UserState>()((set) => ({
       body: JSON.stringify({ name }),
     });
     let user = await res.json();
-    user = { ...user, id: user.id || user._id };
+    user = { ...user, userId: Number(user.userId) };
     set((state) => ({ users: [...state.users, user], currentUser: user }));
   },
 
-  setCurrentUser: (user: any) => set({ currentUser: { ...user, id: user.id || user._id } }),
+  setCurrentUser: (user: any) => set({ currentUser: user ? { ...user, userId: Number(user.userId) } : null }),
 })); 

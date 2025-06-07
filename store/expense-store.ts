@@ -9,7 +9,7 @@ export interface Expense {
   date: string;
   paymentMode: string;
   createdAt: string;
-  userId: string;
+  userId: number;
 }
 
 export interface ExpenseFilters {
@@ -51,7 +51,7 @@ export const useExpenseStore = create<ExpenseState>()((set, get) => ({
   fetchExpenses: async () => {
     const user = useUserStore.getState().currentUser;
     if (!user) return set({ expenses: [] });
-    const res = await fetch(`/api/expenses?userId=${user.id}`);
+    const res = await fetch(`/api/expenses?userId=${user.userId}`);
     const data = await res.json();
     set({ expenses: data });
   },
@@ -62,7 +62,7 @@ export const useExpenseStore = create<ExpenseState>()((set, get) => ({
     const res = await fetch("/api/expenses", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...expense, userId: user.id }),
+      body: JSON.stringify({ ...expense, userId: user.userId }),
     });
     if (!res.ok) {
       const error = await res.json();
@@ -130,9 +130,9 @@ export const useExpenseStore = create<ExpenseState>()((set, get) => ({
       if (filters.searchQuery) {
         const query = filters.searchQuery.toLowerCase();
         return (
-          expense.notes.toLowerCase().includes(query) ||
-          expense.category.toLowerCase().includes(query) ||
-          expense.paymentMode.toLowerCase().includes(query)
+          (expense.notes ?? '').toLowerCase().includes(query) ||
+          (expense.category ?? '').toLowerCase().includes(query) ||
+          (expense.paymentMode ?? '').toLowerCase().includes(query)
         );
       }
 
@@ -143,7 +143,7 @@ export const useExpenseStore = create<ExpenseState>()((set, get) => ({
   getAnalyticsData: async () => {
     const user = useUserStore.getState().currentUser;
     if (!user) return [];
-    const res = await fetch(`/api/expenses/analytics?userId=${user.id}`);
+    const res = await fetch(`/api/expenses/analytics?userId=${user.userId}`);
     const data = await res.json();
     return data;
   },

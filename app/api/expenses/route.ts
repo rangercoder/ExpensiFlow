@@ -6,8 +6,8 @@ export async function POST(req: Request) {
   await dbConnect();
   try {
     const data = await req.json();
-    if (!data.userId) {
-      return NextResponse.json({ error: 'userId is required' }, { status: 400 });
+    if (typeof data.userId !== 'number') {
+      return NextResponse.json({ error: 'userId (number) is required' }, { status: 400 });
     }
     const expense = await Expense.create(data);
     return NextResponse.json(expense, { status: 201 });
@@ -23,10 +23,10 @@ export async function GET(req: Request) {
   const query: any = {};
 
   const userId = searchParams.get('userId');
-  if (!userId) {
-    return NextResponse.json({ error: 'userId is required' }, { status: 400 });
+  if (!userId || isNaN(Number(userId))) {
+    return NextResponse.json({ error: 'userId (number) is required' }, { status: 400 });
   }
-  query.userId = userId;
+  query.userId = Number(userId);
 
   const from = searchParams.get('from');
   const to = searchParams.get('to');

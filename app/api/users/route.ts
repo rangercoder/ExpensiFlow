@@ -14,6 +14,9 @@ export async function POST(req: Request) {
   if (!data.name) {
     return NextResponse.json({ error: 'Name is required' }, { status: 400 });
   }
-  const user = await User.create({ name: data.name });
+  // Find the max userId and increment
+  const lastUser = await User.findOne().sort({ userId: -1 }).lean();
+  const nextUserId = lastUser && lastUser.userId ? lastUser.userId + 1 : 1;
+  const user = await User.create({ name: data.name, userId: nextUserId });
   return NextResponse.json(user, { status: 201 });
 } 

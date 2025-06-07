@@ -6,10 +6,10 @@ export async function GET(req: Request) {
   await dbConnect();
   const { searchParams } = new URL(req.url);
   const userId = searchParams.get('userId');
-  if (!userId) {
-    return NextResponse.json({ error: 'userId is required' }, { status: 400 });
+  if (!userId || isNaN(Number(userId))) {
+    return NextResponse.json({ error: 'userId (number) is required' }, { status: 400 });
   }
-  const expenses = await Expense.find({ userId }).lean();
+  const expenses = await Expense.find({ userId: Number(userId) }).lean();
   const monthly: Record<string, Record<string, number>> = {};
 
   expenses.forEach((e: any) => {
